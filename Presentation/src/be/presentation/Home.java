@@ -13,6 +13,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.event.KeyEvent;
@@ -29,6 +33,13 @@ public class Home extends JFrame {
 	private static Home frame;
 	
 	private HashMap<String, Integer> total = new HashMap<String, Integer>();
+	private ArrayList<Spectacle> listeSpectacles = new ArrayList<Spectacle>(3);
+
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	
+	private Spectacle spectacle1 = new Spectacle(1, dateFromString("14/11/2020"), "Je suis la description du spectacle 1");
+	private Spectacle spectacle2 = new Spectacle(2, dateFromString("18/11/2020"), "Je suis la description du spectacle 2");
+	private Spectacle spectacle3 = new Spectacle(3, dateFromString("12/12/2020"), "Je suis la description du spectacle 3");
 	
 	/**
 	 * Launch the application.
@@ -98,6 +109,7 @@ public class Home extends JFrame {
 				btnNewButton.setBounds(207, 104, 143, 34);
 				btnNewButton.addActionListener((event) -> {
 					total.put("Spectacle 1", 50);
+					listeSpectacles.add(spectacle1);
 					System.out.println(total);
 				});
 				ShowPanel.add(btnNewButton);
@@ -106,6 +118,7 @@ public class Home extends JFrame {
 				btnNewButton_1.setBounds(208, 166, 142, 34);
 				btnNewButton_1.addActionListener((event) -> {
 					total.put("Spectacle 2", 35);
+					listeSpectacles.add(spectacle2);
 					System.out.println(total);
 				});
 				ShowPanel.add(btnNewButton_1);
@@ -114,6 +127,7 @@ public class Home extends JFrame {
 				btnNewButton_2.setBounds(207, 227, 143, 34);
 				btnNewButton_2.addActionListener((event) -> {
 					total.put("Spectacle 3", 40);
+					listeSpectacles.add(spectacle3);
 					System.out.println(total);
 				});
 				ShowPanel.add(btnNewButton_2);
@@ -146,13 +160,16 @@ public class Home extends JFrame {
 			tot += (Integer)sp.getValue();
 		}
 		
-		JLabel c = new JLabel("Total à payer : " + tot.toString() + "$");
+		JLabel c = new JLabel("Total Ã  payer : " + tot.toString() + "$");
 		c.setBounds(220, height+20, 194, 29);
 		OrderPanel.add(c);
 		
 		if(tot != 0) {
 			JButton b = new JButton("Imprimer vos tickets");
 			b.setBounds(207, height+50, 160, 34);
+			b.addActionListener((event) -> {
+				Printer.print(listeSpectacles);
+			});
 			OrderPanel.add(b);
 		}
 	}
@@ -199,5 +216,16 @@ public class Home extends JFrame {
 
 		setJMenuBar(menuBar);
 		SwitchPanels(HomePanel);
+	}
+	
+	private Date dateFromString(String dateString) {
+		try {
+			Date date = dateFormat.parse(dateString);
+			return date;
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+			return new Date();
+		}
+		
 	}
 }
