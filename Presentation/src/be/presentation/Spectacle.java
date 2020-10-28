@@ -42,7 +42,7 @@ public class Spectacle implements Comparable {
 	}
 	
 	public int getPlace() {
-		return random.nextInt(451);
+		return random.nextInt(450)+1;
 	}
 
 	@Override
